@@ -30,6 +30,7 @@ export const HeaderContainer = styled.header`
 
             &.active {
                 color: ${props => props.theme.colors.primary};
+            }
         }
         
     }
