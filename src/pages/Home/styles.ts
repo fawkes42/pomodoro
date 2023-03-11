@@ -58,3 +58,29 @@ export const Separator = styled.div`
     justify-content: center;
 `;
 
+export const StartCountdownButton = styled.button`
+    width: 100%;
+    border: 0;
+    border-radius: 8px;
+    padding: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    background: ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors["gray-100"]};
+
+    transition: filter 0.2s;
+
+    &:enabled:hover {
+        filter: brightness(0.9);
+    }
+
+`;
+

@@ -23,4 +23,9 @@ export const GlobalStyle = createGlobalStyle`
         outline: 0;
     }
 
+    :disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
 `;
