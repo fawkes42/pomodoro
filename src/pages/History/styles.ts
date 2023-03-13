@@ -65,3 +65,29 @@ export const HistoryList = styled.div`
         }
     }
 `
+
+
+const statusColors = {
+    canceled: "red-500",
+    done: "green-500",
+    pending: "yellow-500"
+} as const;
+
+interface statusProps {
+    color: keyof typeof statusColors;
+}
+
+export const StatusBadge = styled.span<statusProps>`	
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: ${props => props.theme.colors[statusColors[props.color]]};
+
+    }
+`;
