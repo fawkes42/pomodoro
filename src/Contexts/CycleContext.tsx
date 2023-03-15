@@ -56,7 +56,10 @@ export function CyclesProvider({ children }: CyclesProviderProps) {
         document.title = "Pomodoro"
     }
 
-    const done = () => dispatch({ type: ActionTypes.DONE })
+    const done = () => {
+        dispatch({ type: ActionTypes.DONE })
+        document.title = "Pomodoro"
+    }
 
     return (
         <CyclesContext.Provider value={{
