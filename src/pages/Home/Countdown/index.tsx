@@ -25,7 +25,7 @@ export function Countdown() {
         let interval: NodeJS.Timeout
         if (currentCycle) {
             interval = setInterval(() => {
-                const secondsDiff = differenceInSeconds(new Date(), currentCycle.startDate)
+                const secondsDiff = differenceInSeconds(new Date(), new Date(currentCycle.startDate))
 
                 if (secondsDiff >= totalSeconds) {
                     done()

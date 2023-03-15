@@ -1,9 +1,10 @@
 import {
     createContext,
     ReactNode,
+    useEffect,
     useReducer,
-    useState
 } from "react";
+import { CycleReducer, ActionTypes } from "../Reducers/Cycle";
 import { Cycle } from "../schemas/Cycle";
 import { NewCycle } from "../schemas/NewCycle";
 
@@ -20,60 +21,26 @@ interface CyclesProviderProps {
     children: ReactNode;
 }
 
-interface CycleStates {
-    cycles: Cycle[];
-    currentCycle: Cycle | null;
-}
-
-
 export function CyclesProvider({ children }: CyclesProviderProps) {
-    const [cycleStates, dispatch] = useReducer((state: CycleStates, action: any) => {
-        switch (action.type) {
-            case "ADD":
-                return {
-                    ...state,
-                    cycles: [...state.cycles, action.payload],
-                    currentCycle: action.payload
-                }
-            case "STOP":
-                return {
-                    ...state,
-                    cycles: state.cycles.map(cycle => {
-                        if (cycle.id === state.currentCycle?.id) {
-                            return {
-                                ...cycle,
-                                stopDate: new Date()
-                            }
-                        }
-                        return cycle
-                    }),
-                    currentCycle: null
-                }
-            case "DONE":
-                return {
-                    ...state,
-                    cycles: state.cycles.map(cycle => {
-                        if (cycle.id === state.currentCycle?.id) {
-                            return {
-                                ...cycle,
-                                done: true
-                            }
-                        }
-                        return cycle
-                    }),
-                    currentCycle: null
-                }
-            default:
-                return state
+    const [cycleStates, dispatch] = useReducer(
+        CycleReducer,
+        {
+            cycles: [],
+            currentCycle: null
+        },
+        (initialState) => {
+            const localData = localStorage.getItem("@Pomodoro:cycleStates")
+            return localData ? JSON.parse(localData) : initialState
         }
-    }, {
-        cycles: [],
-        currentCycle: null
-    })
+    )
+
+    useEffect(() => {
+        localStorage.setItem("@Pomodoro:cycleStates", JSON.stringify(cycleStates))
+    }, [cycleStates])
 
     const onSubmit = (data: NewCycle) => {
         dispatch({
-            type: "ADD",
+            type: ActionTypes.ADD,
             payload: {
                 id: String(new Date().getTime()),
                 task: data.task,
@@ -85,11 +52,11 @@ export function CyclesProvider({ children }: CyclesProviderProps) {
     }
 
     const handleStopCountdown = () => {
-        dispatch({ type: "STOP" })
+        dispatch({ type: ActionTypes.STOP })
         document.title = "Pomodoro"
     }
 
-    const done = () => dispatch({ type: "DONE" })
+    const done = () => dispatch({ type: ActionTypes.DONE })
 
     return (
         <CyclesContext.Provider value={{
@@ -97,7 +64,7 @@ export function CyclesProvider({ children }: CyclesProviderProps) {
             currentCycle: cycleStates.currentCycle,
             done,
             onSubmit,
-            handleStopCountdown
+            handleStopCountdown,
         }}>
             {children}
         </CyclesContext.Provider>
