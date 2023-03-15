@@ -28,4 +28,10 @@ export const GlobalStyle = createGlobalStyle`
         opacity: 0.7;
     }
 
+    @media (max-width: 768px) {
+        html {
+            font-size: 70%;
+        }
+    }
+
 `;

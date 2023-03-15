@@ -1,10 +1,16 @@
+import { formatDistanceToNow } from "date-fns";
+import { useContext } from "react";
+import { CyclesContext } from "../../Contexts/CycleContext";
 import { HistoryContainer, HistoryList, StatusBadge } from "./styles";
 
 export function History() {
+    const { cycles } = useContext(CyclesContext);
     return (
         <HistoryContainer>
             <h1>My History</h1>
-
+            <pre>
+                {JSON.stringify(cycles, null, 2)}
+            </pre>
             <HistoryList>
                 <table>
                     <thead>
@@ -16,26 +22,35 @@ export function History() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Study</td>
-                            <td>25</td>
-                            <td>10:00</td>
-                            <td>
-                                <StatusBadge color="done">
-                                    Done
-                                </StatusBadge>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Work</td>
-                            <td>50</td>
-                            <td>10:25</td>
-                            <td>
-                                <StatusBadge color="canceled">
-                                    Canceled
-                                </StatusBadge>
-                            </td>
-                        </tr>
+                        {
+                            cycles.map(cycle => {
+                                return (
+                                    <tr key={cycle.id}>
+                                        <td>{cycle.task}</td>
+                                        <td>
+                                            {
+                                                cycle.time > 1
+                                                    ? `${cycle.time} minutes`
+                                                    : `${cycle.time} minute`
+                                            }
+                                        </td>
+                                        <td>
+                                            {
+                                                formatDistanceToNow(
+                                                    new Date(cycle.startDate),
+                                                    { addSuffix: true }
+                                                )
+                                            }
+                                        </td>
+                                        <td>
+                                            <StatusBadge color={cycle.done ? "done" : "canceled"}>
+                                                {cycle.done ? "Done" : "Canceled"}
+                                            </StatusBadge>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </table>
             </HistoryList>

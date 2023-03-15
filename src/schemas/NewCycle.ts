@@ -8,4 +8,15 @@ export const newCycleSchema = z.object({
     time: z.number().min(5).max(90).step(5)
 })
 
-export type NewCycle = z.infer<typeof newCycleSchema>
+export type NewCycleAttributes = z.infer<typeof newCycleSchema>
+
+export class NewCycle {
+    task: string
+    time: number
+
+    constructor(attributes: NewCycleAttributes) {
+        this.task = attributes.task
+        this.time = attributes.time
+    }
+}
+
