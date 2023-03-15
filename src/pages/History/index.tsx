@@ -40,9 +40,27 @@ export function History() {
                                             }
                                         </td>
                                         <td>
-                                            <StatusBadge color={cycle.done ? "done" : "canceled"}>
-                                                {cycle.done ? "Done" : "Canceled"}
-                                            </StatusBadge>
+                                            {
+                                                cycle.done && (
+                                                    <StatusBadge color="done">
+                                                        Done
+                                                    </StatusBadge>
+                                                )
+                                            }
+                                            {
+                                                cycle.stopDate && (
+                                                    <StatusBadge color="canceled">
+                                                        Canceled
+                                                    </StatusBadge>
+                                                )
+                                            }
+                                            {
+                                                (!cycle.done && !cycle.stopDate) && (
+                                                    <StatusBadge color="pending">
+                                                        In progress
+                                                    </StatusBadge>
+                                                )
+                                            }
                                         </td>
                                     </tr>
                                 )
